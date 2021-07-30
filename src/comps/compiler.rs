@@ -133,6 +133,19 @@ int main() {
                         />
                     </div>
                 </div>
+                <div class="block content">
+                    {" While this "}
+                        <a href="https://gitlab.com/arxra/my-cigrid-compiler">
+                            <span class="icon">
+                                <i class="fa fa-gitlab"/>
+                            </span>
+                            {"-project"}
+                        </a>
+                        {" is linked here, its not public by request of the examiner so access can be granted on request.
+                        This compiler was written as part of ID2202 at Kungliga Tekniska Högskolan in Stockholm.
+                        It just managed a passing grade, as there are many things missing but its a cool demonstration of Rust and Wasm.
+                        I learned a lot during this project about Rust, so there _should_ be a blogpost on this site about it. Should..."}
+                </div>
             </>
         }
     }

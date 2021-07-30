@@ -34,7 +34,8 @@ impl Component for Home {
                 <div class="block">
                     <p>
                         {"I am not the good with words but there is a subset of c compiler here written in rust and brought to your browser through "}
-                        <a href="https://yew.rs">{"the yew WASM framwork"}</a>
+                        <a href="https://yew.rs">{"the yew frontend framwork"}</a>
+                        {" which compiles everything down to WASM. Neat!"}
                     </p>
                 </div>
                 <div class="block">
