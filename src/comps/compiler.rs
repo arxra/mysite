@@ -1,11 +1,10 @@
-use yew::{prelude::*, services::ConsoleService};
 use cigrid::compile;
-
+use yew::{prelude::*, services::ConsoleService};
 pub(crate) enum Msg {
     Compile,
-    Update(String)
+    Default,
+    Update(String),
 }
-
 #[derive(Debug)]
 pub(crate) struct CCompiler {
     link: ComponentLink<Self>,
@@ -13,6 +12,7 @@ pub(crate) struct CCompiler {
     output: String,
     success: bool,
     loading: bool,
+    example: String,
 }
 
 impl Component for CCompiler {
@@ -21,48 +21,13 @@ impl Component for CCompiler {
     type Properties = ();
 
     fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { link, input: String::new(),output: String::new(), success: true, loading: false }
-    }
-
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
-        match msg {
-            Msg::Compile => {
-                self.loading = true;
-                println!("{}", self.input);
-                match compile(self.input.clone()){
-                    Ok(text) => {
-                        ConsoleService::info(&format!("Success: {:?}", text));
-                        self.output = text;
-                        self.success = true
-                    }
-                    Err(failure) => {
-                        self.output = failure.to_string();
-                        if failure.code != 0 {
-                            self.success = false;
-                        }
-                        ConsoleService::error(&format!("failed(code: {:?}): {:?}", &failure.code, &failure.message));
-                    }
-                }
-                self.loading = false;
-                true
-            },
-            Msg::Update(text) => {
-                self.input = text;
-                false
-            }
-        }
-    }
-
-    fn change(&mut self, _props: Self::Properties) -> ShouldRender {
-        false
-    }
-
-    fn view(&self) -> Html {
-        let mut success_rend = vec!["textarea"];
-        if self.success {success_rend.push("is-danger")} else {success_rend.push("is-info")}
-        if self.loading {success_rend.push("is-loading")}
-        let example = 
-"#include <stdio.h>
+        Self {
+            link,
+            input: String::new(),
+            output: String::new(),
+            success: true,
+            loading: false,
+            example: "#include <stdio.h>
 
 extern int putchar(int x);
 
@@ -76,29 +41,99 @@ int main() {
   putchar(x);
   return 0;
 }
-";
+"
+            .to_string(),
+        }
+    }
 
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::Compile => {
+                self.loading = true;
+                println!("{}", self.input);
+                match compile(self.input.clone()) {
+                    Ok(text) => {
+                        ConsoleService::info(&format!("Success: {:?}", text));
+                        self.output = text;
+                        self.success = true
+                    }
+                    Err(failure) => {
+                        if failure.code == 0 {
+                            self.output = "No Input".to_string()
+                        } else {
+                            self.output = failure.to_string();
+                        }
+                        ConsoleService::error(&format!(
+                            "failed(code: {:?}): {:?}",
+                            &failure.code, &failure.message
+                        ));
+                    }
+                }
+                self.loading = false;
+                true
+            }
+            Msg::Default => {
+                self.input = self.example.clone();
+                true
+            }
+            Msg::Update(text) => {
+                self.input = text;
+                false
+            }
+        }
+    }
+
+    fn change(&mut self, _props: Self::Properties) -> ShouldRender {
+        true
+    }
+
+    fn view(&self) -> Html {
+        let mut success_rend = vec!["textarea"];
+        if self.success {
+            success_rend.push("is-info")
+        } else {
+            success_rend.push("is-danger")
+        }
+        if self.loading {
+            success_rend.push("is-loading")
+        }
         html! {
-            <div class="column">
-                <div class="column is-one-third">
-                    <textarea 
-                        class="textarea" 
+            <>
+                <div class="block content">
+                    {"
+                    A compiler for a subset of C, where the subset is quite small.
+                    However, linking the output ASM will run and print the value of x and the charachter A.
+                    "}
+                </div>
+            <div class="columns">
+                <div class="column">
+                    <textarea
+                        class="textarea"
                         value=self.input.clone()
                         oninput=self.link.callback(|event: InputData| Msg::Update(event.value))
-                        placeholder = example
+                        placeholder = self.example.clone()
+                        rows=30
                     ></textarea>
                 </div>
-                <div class="column">
-                    <button class="button" onclick=self.link.callback(|_| Msg::Compile)>{"Compile"}</button>
+                <div class="column is-2">
+                    <div align="center">
+                        <button class="button" onclick=self.link.callback(|_| Msg::Default)>{"Use C example"}</button>
+                    </div>
+                    <br/>
+                    <div align="center">
+                        <button class="button" onclick=self.link.callback(|_| Msg::Compile)>{"Compile"}</button>
+                    </div>
                 </div>
-                <div class="column is-one-third">
+                <div class="column">
                     <textarea
                         class=success_rend
-                        readonly=true 
+                        readonly=true
                         value=self.output.clone()
+                        rows=30
                     />
                 </div>
             </div>
+            </>
         }
     }
 }

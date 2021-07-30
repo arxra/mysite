@@ -42,12 +42,10 @@ impl Component for Model {
         });
 
         html! {
-            <>
+            <div class="container" height="100%">
                 <Navbar/>
-                <div class="container">
-                    <Router<Route, ()> render=render/>
-                </div>
-            </>
+                <Router<Route, ()> render=render/>
+            </div>
         }
     }
 }

@@ -30,7 +30,6 @@ impl Component for Navbar {
         html! {
         <div class="navbar" role="navigation">
             <div class="navbar-brand">
-            // Insert my meme-face
             </div>
             <div class="navbar-menu">
                 <div class="navbar-start">
@@ -43,6 +42,6 @@ impl Component for Navbar {
                 </div>
             </div>
         </div>
-                }
+        }
     }
 }
