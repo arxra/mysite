@@ -28,19 +28,29 @@ impl Component for Navbar {
         type Anchor = RouterAnchor<Route>;
 
         html! {
-        <div class="navbar" role="navigation">
-            <div class="navbar-brand">
-            </div>
-            <div class="navbar-menu">
-                <div class="navbar-start">
-                    <Anchor route=Route::Homepage classes="navbar-item">
-                    {"Home"}
-                    </Anchor>
-                    <Anchor route=Route::Compilerpage classes="navbar-item">
-                    {"Toy Compiler"}
-                    </Anchor>
+        <div class="block">
+            <nav class="navbar is-info has-shadow" role="navigation">
+                <div class="navbar-menu is-active">
+                    <div class="navbar-start">
+                        <Anchor route=Route::Homepage classes="navbar-item">
+                            {"Home"}
+                        </Anchor>
+                        <Anchor route=Route::Blogpage classes="navbar-item">
+                            {"Blog Posts"}
+                        </Anchor>
+                        <Anchor route=Route::Compilerpage classes="navbar-item">
+                            {"Toy Compiler"}
+                        </Anchor>
+                    </div>
+                    <div clas="navbar-end">
+                        <a href="https://gitlab.com/arxra/mysite" class="navbar-item">
+                            <span class="icon">
+                                <i class="fa fa-gitlab"/>
+                            </span>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </nav>
         </div>
         }
     }

@@ -105,34 +105,34 @@ int main() {
                     However, linking the output ASM will run and print the value of x and the charachter A.
                     "}
                 </div>
-            <div class="columns">
-                <div class="column">
-                    <textarea
-                        class="textarea"
-                        value=self.input.clone()
-                        oninput=self.link.callback(|event: InputData| Msg::Update(event.value))
-                        placeholder = self.example.clone()
-                        rows=30
-                    ></textarea>
-                </div>
-                <div class="column is-2">
-                    <div align="center">
-                        <button class="button" onclick=self.link.callback(|_| Msg::Default)>{"Use C example"}</button>
+                <div class="columns">
+                    <div class="column">
+                        <textarea
+                            class="textarea"
+                            value=self.input.clone()
+                            oninput=self.link.callback(|event: InputData| Msg::Update(event.value))
+                            placeholder = self.example.clone()
+                            rows=30
+                        ></textarea>
                     </div>
-                    <br/>
-                    <div align="center">
-                        <button class="button" onclick=self.link.callback(|_| Msg::Compile)>{"Compile"}</button>
+                    <div class="column is-2">
+                        <div align="center">
+                            <button class="button" onclick=self.link.callback(|_| Msg::Default)>{"Use C example"}</button>
+                        </div>
+                        <br/>
+                        <div align="center">
+                            <button class="button" onclick=self.link.callback(|_| Msg::Compile)>{"Compile"}</button>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <textarea
+                            class=success_rend
+                            readonly=true
+                            value=self.output.clone()
+                            rows=30
+                        />
                     </div>
                 </div>
-                <div class="column">
-                    <textarea
-                        class=success_rend
-                        readonly=true
-                        value=self.output.clone()
-                        rows=30
-                    />
-                </div>
-            </div>
             </>
         }
     }

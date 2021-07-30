@@ -4,14 +4,14 @@ mod comps;
 mod menu;
 mod route;
 
-use crate::comps::updownbuttons::UpDownButtons;
 use crate::comps::compiler::CCompiler;
+use crate::comps::blog::Blog;
+use crate::comps::home::Home;
 use crate::route::Route;
 use menu::Navbar;
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 use yew_router::prelude::*;
-
 
 #[derive(Debug)]
 struct Model {}
@@ -25,9 +25,6 @@ impl Component for Model {
     }
 
     fn update(&mut self, _msg: Self::Message) -> ShouldRender {
-        for _ in 0..5 {
-            println!("test")
-        }
         true
     }
 
@@ -37,12 +34,13 @@ impl Component for Model {
 
     fn view(&self) -> Html {
         let render = Router::render(|switch: Route| match switch {
-            Route::Homepage => html! {<UpDownButtons/>},
+            Route::Homepage => html! {<Home/>},
+            Route::Blogpage => html! {<Blog/>},
             Route::Compilerpage => html! {<CCompiler/>},
         });
 
         html! {
-            <div class="container" height="100%">
+            <div class="container">
                 <Navbar/>
                 <Router<Route, ()> render=render/>
             </div>

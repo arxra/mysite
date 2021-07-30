@@ -38,7 +38,7 @@ impl Component for UpDownButtons {
 
     fn view(&self) -> Html {
         html! {
-            <div class="tile">
+            <div class="block content">
                 <button class="button" onclick=self.link.callback(|_| Msg::AddOne)>{ "+1" }</button>
                 <button class="button" onclick=self.link.callback(|_| Msg::SubOne)>{ "-1" }</button>
                 <p>{ self.value }</p>
