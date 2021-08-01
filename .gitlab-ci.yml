@@ -1,0 +1,28 @@
+stages:
+  - test
+  - build
+
+services:
+    - docker:18.09-dind
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+run-test:
+  stage: test
+  image: rust:latest
+  when: manual
+  script:
+  - rustc --version && cargo --version
+  - cargo test
+
+build:
+  stage: build
+  image: rust:latest
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - rustc --version && cargo --version
+  - cargo install trunk
+  - trunk build --release
+  - docker build -t $CONTAINER_TEST_IMAGE .
+  - docker push $CONTAINER_TEST_IMAGE
