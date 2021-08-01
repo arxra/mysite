@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - publish
 
 services:
     - docker:18.09-dind
@@ -19,10 +20,20 @@ run-test:
 build:
   stage: build
   image: rust:latest
+  artifacts:
+    paths:
+      - dist/
   script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - rustc --version && cargo --version
   - cargo install trunk
   - trunk build --release
+
+docker:
+  stage: publish
+  image: docker:18.09-dind
+  needs:
+    - build
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker build -t $CONTAINER_TEST_IMAGE .
   - docker push $CONTAINER_TEST_IMAGE
