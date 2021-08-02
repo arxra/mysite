@@ -18,7 +18,7 @@ run-test:
 
 build:
   stage: build
-  image: rust:1:54
+  image: rust:latest
   artifacts:
     paths:
       - dist/
