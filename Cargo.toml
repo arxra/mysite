@@ -12,6 +12,6 @@ crate-type = ["cdylib", "rlib"]
 wasm-bindgen = "0.2.74"
 yew = "0.18.0"
 yew-router = "0.15.0"
-cigrid = {git = "ssh://git@gitlab.com/arxra/my-cigrid-compiler.git", branch="main"}
+cigrid = {git = "https://gitlab.com/arxra/my-cigrid-compiler.git", branch="main"}
 env_logger = "0.9.0"
 log = "0.4.14"
