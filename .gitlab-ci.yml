@@ -29,7 +29,6 @@ build:
   - trunk build --release
 
 docker:
-  stage: publish
   image: docker:18.09-dind
   needs:
     - build
