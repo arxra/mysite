@@ -9,9 +9,12 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-wasm-bindgen = "0.2.74"
-yew = "0.18.0"
-yew-router = "0.15.0"
+wasm-bindgen = "0.2.81"
+yew = "0.20.0"
+yew-router = "0.17.0"
 cigrid = {git = "https://gitlab.com/arxra/my-cigrid-compiler.git", branch="main"}
-env_logger = "0.9.0"
-log = "0.4.14"
+env_logger = "0.10.0"
+log = "0.4.17"
+yew-hooks = "0.2.0"
+anyhow = "1.0.68"
+wee_alloc = "0.4.5"
