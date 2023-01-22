@@ -1,5 +1,8 @@
 use cigrid::compile;
+use wasm_bindgen::JsCast;
+use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
+use log::info;
 // use yew_hooks:
 
 const EXAMPLE: &str = "
@@ -21,24 +24,28 @@ int main() {
 
 #[function_component(CCompiler)]
 pub fn view() -> Html {
-    let input = use_state(|| "".to_owned());
-    let output = use_state(|| "".to_owned());
+    let input_handler = use_state_eq(|| "".to_owned());
+    let output = use_state_eq(|| "".to_owned());
 
-    let set_input = {
-        let input = input.clone();
+    let oninput = {
+        let input_handler = input_handler.clone();
         Callback::from(move |e: InputEvent| {
-            input.set(e.data().unwrap());
+            let target = e.target();
+            let input = target.and_then(|t| t.dyn_into::<HtmlTextAreaElement>().ok());
+            if let Some(input) = input {
+                input_handler.set(input.value());
+            }
         })
     };
     let use_example = {
-        let input = input.clone();
+        let input_handler = input_handler.clone();
         Callback::from(move |_e: MouseEvent| {
-            input.set(EXAMPLE.to_owned());
+            input_handler.set(EXAMPLE.to_owned());
         })
     };
     let click_compile = {
         let output = output.clone();
-        let input = input.clone();
+        let input = input_handler.clone();
 
         Callback::from(move |_e: MouseEvent| match compile(input.to_string()) {
             Ok(text) => output.set(text),
@@ -57,17 +64,17 @@ pub fn view() -> Html {
                 {"
                     A compiler for a subset of C, where the subset is quite small.
                     However, linking the output x86-ASM will run and print the value of x and the character A.
-                    "}
+                "}
             </div>
-            <div class="columns">
+            <div class="columns is-vcentered">
                 <div class="column">
                     <textarea
                         class="textarea"
-                        value={ "" }
-                        oninput={set_input}
+                        {oninput}
+                        value={ input_handler.to_string() }
                         placeholder = 	{ EXAMPLE }
                         rows=30
-                    ></textarea>
+                    />
                 </div>
                 <div class="column is-2">
                     <div align="center">
@@ -80,7 +87,7 @@ pub fn view() -> Html {
                 </div>
                 <div class="column">
                     <textarea
-                        class="success"
+                        class="textarea"
                         readonly=true
                         value={output.to_string()}
                         rows=30
